@@ -4,8 +4,23 @@ import * as React from 'react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
 import { Layer, Source } from 'react-map-gl/maplibre';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useJMANowcastTileUrl, useJMARiskRasterTileUrl } from '@/lib/jma';
+import useSWR from 'swr';
+import { JMAConditionalGeoJsonMap } from '@/components/JMAConditionalGeoJsonMap';
+
 const overpassQueryWithIconStyleList = [
+  {
+    overpassQuery: `
+        [out:json][timeout:30000];
+        relation["name"="日本"];
+        out geom;
+    `,
+    featureStyle: {
+      color: 'transparent',
+      fillColor: 'transparent'
+    },
+  },
   {
     overpassQuery: `
         [out:json][timeout:30000];
@@ -72,7 +87,7 @@ const overpassQueryWithIconStyleList = [
   },
 ];
 
-const gsiRasterTileOverlayLayers = [
+const GSIRasterTileOverlayLayers = [
   {
     url: 'https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png',
     id: 'gsi-01_flood_l2_shinsuishin_data',
@@ -171,6 +186,62 @@ export default function Page() {
     setSelectedRasterTileOverlayLayerIds,
   ] = useState<string[]>([]);
 
+  const landslideTileUrl = useJMARiskRasterTileUrl('land');
+  const inundateTileUrl = useJMARiskRasterTileUrl('inund');
+  const nowcastTileUrl = useJMANowcastTileUrl();
+
+  const JMARasterTileOverlayLayers = useMemo(() => {
+    return [
+      {
+        url: landslideTileUrl,
+        id: 'jma-landslide',
+        name: '気象庁 キキクル 土砂災害危険度分布',
+        attribution:
+          '<a href="https://www.jma.go.jp/bosai/risk/">気象庁 キキクル</a>',
+        opacity: 0.7,
+        maxzoom: 11,
+      },
+      {
+        url: inundateTileUrl,
+        id: 'jma-inundate',
+        name: '気象庁 キキクル 浸水危険度分布',
+        attribution:
+          '<a href="https://www.jma.go.jp/bosai/risk/">気象庁 キキクル</a>',
+        opacity: 0.7,
+        maxzoom: 11,
+      },
+      {
+        url: nowcastTileUrl,
+        id: 'jma-nowcast',
+        name: '気象庁 高解像度降水ナウキャスト',
+        attribution:
+          '<a href="https://www.jma.go.jp/bosai/nowc/">気象庁 キキクル</a>',
+        opacity: 0.4,
+        maxzoom: 10,
+      }
+    ];
+  }, [landslideTileUrl, inundateTileUrl, nowcastTileUrl]);
+
+  const [class10sGeoJson, setClass10sGeoJson] = useState();
+  const [JMAWarnings, setJMAWarnings] = useState();
+
+  useEffect(() => {
+    const thisEffect = async () => {
+      const class10sGeoJsonRes = await fetch(
+        'https://www.jma.go.jp/bosai/common/const/geojson/class10s.json'
+      );
+      const newClass10sGeoJson = await class10sGeoJsonRes.json();
+      setClass10sGeoJson(newClass10sGeoJson);
+
+      const JMAWarningsRes = await fetch(
+        'https://www.jma.go.jp/bosai/warning/data/warning/map.json'
+      );
+      const newJMAWarnings = await JMAWarningsRes.json();
+      setJMAWarnings(newJMAWarnings);
+    };
+    thisEffect();
+  }, []);
+
   const onChangeSelectedRasterTileOverlayLayerIds = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -185,9 +256,9 @@ export default function Page() {
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-      <StaticOverpassQueryMap
-        overpassQueryWithFeatureStyleList={overpassQueryWithIconStyleList}
-      >
+      <StaticOverpassQueryMap overpassQueryWithFeatureStyleList={
+        overpassQueryWithIconStyleList
+      }>
         <div
           style={{
             position: 'absolute',
@@ -199,44 +270,50 @@ export default function Page() {
             margin: '12px',
           }}
         >
-          {gsiRasterTileOverlayLayers.map((layer) => {
-            return (
-              <div
-                key={`${layer.id}-wrap`}
-                style={{
-                  marginTop: '3px',
-                }}
-              >
-                <label
-                  key={`${layer.id}-label`}
+          {[GSIRasterTileOverlayLayers, JMARasterTileOverlayLayers]
+            .flat()
+            .map((layer) => {
+              return (
+                <div
+                  key={`${layer.id}-wrap`}
                   style={{
-                    cursor: 'pointer',
+                    marginTop: '3px',
                   }}
                 >
-                  <input
-                    key={`${layer.id}-checkbox`}
-                    type='checkbox'
-                    checked={selectedRasterTileOverlayLayerIds.includes(
-                      layer.id
-                    )}
-                    value={layer.id}
-                    onChange={onChangeSelectedRasterTileOverlayLayerIds}
+                  <label
+                    key={`${layer.id}-label`}
                     style={{
-                      marginRight: '4px',
                       cursor: 'pointer',
                     }}
-                  />
-                  {layer.name}
-                </label>
-              </div>
-            );
-          })}
+                  >
+                    <input
+                      key={`${layer.id}-checkbox`}
+                      type='checkbox'
+                      checked={selectedRasterTileOverlayLayerIds.includes(
+                        layer.id
+                      )}
+                      value={layer.id}
+                      onChange={onChangeSelectedRasterTileOverlayLayerIds}
+                      style={{
+                        marginRight: '4px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                    {layer.name}
+                  </label>
+                </div>
+              );
+            })}
         </div>
-        {gsiRasterTileOverlayLayers
+        {[GSIRasterTileOverlayLayers, JMARasterTileOverlayLayers]
+          .flat()
           .filter((layer) =>
             selectedRasterTileOverlayLayerIds.includes(layer.id)
           )
           .map((layer) => {
+            if (!layer.url) {
+              return;
+            }
             return (
               <Source
                 key={`${layer.id}-source`}
@@ -257,6 +334,9 @@ export default function Page() {
               </Source>
             );
           })}
+          {class10sGeoJson && (
+          <JMAConditionalGeoJsonMap geojson={class10sGeoJson} conditions={JMAWarnings} />
+          )}
       </StaticOverpassQueryMap>
     </div>
   );
