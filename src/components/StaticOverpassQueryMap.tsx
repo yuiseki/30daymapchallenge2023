@@ -1,20 +1,28 @@
-import { FeatureCollection } from "geojson";
-import osmtogeojson from "osmtogeojson";
-import { Md5 } from "ts-md5";
-import { useEffect, useState } from "react";
+import { FeatureCollection } from 'geojson';
+import osmtogeojson from 'osmtogeojson';
+import { Md5 } from 'ts-md5';
+import { useEffect, useState } from 'react';
 
-import { StaticGeoJsonMap } from "./StaticGeoJsonMap";
-import { getOverpassResponseJsonWithCache } from "@/utils/osm/getOverpassResponse";
-
+import { StaticGeoJsonMap } from './StaticGeoJsonMap';
+import { getOverpassResponseJsonWithCache } from '@/utils/osm/getOverpassResponse';
 
 export const StaticOverpassQueryMap: React.FC<{
   mapStyle?: string;
   mapPadding?: number;
-  overpassQuery: string;
+  overpassQueryWithFeatureStyleList: Array<{
+    overpassQuery: string;
+    featureStyle?: {
+      color?: string;
+      fillColor?: string;
+      emoji?: string;
+    };
+  }>;
+  children?: any;
 }> = ({
-  mapStyle = "https://tile.openstreetmap.jp/styles/osm-bright-en/style.json",
+  mapStyle = 'https://tile.openstreetmap.jp/styles/osm-bright-en/style.json',
   mapPadding = 200,
-  overpassQuery,
+  overpassQueryWithFeatureStyleList,
+  children,
 }) => {
   const [geoJsonWithStyleList, setGeoJsonWithStyleList] = useState<
     Array<{
@@ -28,37 +36,45 @@ export const StaticOverpassQueryMap: React.FC<{
     }>
   >([]);
 
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
     const thisEffect = async () => {
-      const overpassResJson = await getOverpassResponseJsonWithCache(
-        overpassQuery
-      );
-      const newGeojson = osmtogeojson(overpassResJson);
-      const md5 = new Md5();
-      md5.appendStr(overpassQuery);
-      const hash = md5.end();
-      setGeoJsonWithStyleList((prev) => {
-        return [
-          ...prev,
-          {
-            id: hash as string,
-            style: {
-              color: "yellow",
-              fillColor: "transparent",
+      setLoaded(true);
+      for (const overpassQueryWithFeatureStyle of overpassQueryWithFeatureStyleList) {
+        const overpassResJson = await getOverpassResponseJsonWithCache(
+          overpassQueryWithFeatureStyle.overpassQuery
+        );
+        const newGeojson = osmtogeojson(overpassResJson);
+        const md5 = new Md5();
+        md5.appendStr(overpassQueryWithFeatureStyle.overpassQuery);
+        const hash = md5.end();
+        setGeoJsonWithStyleList((prev) => {
+          if (prev.find((item) => item.id === hash)) return prev;
+          return [
+            ...prev,
+            {
+              id: hash as string,
+              style: overpassQueryWithFeatureStyle.featureStyle || {},
+              geojson: newGeojson,
             },
-            geojson: newGeojson,
-          },
-        ];
-      });
+          ];
+        });
+      }
+    };
+    if (!loaded) {
+      setLoaded(true);
+      thisEffect();
     }
-    thisEffect();
-  }, [overpassQuery]);
+  }, [loaded, overpassQueryWithFeatureStyleList]);
 
   return (
     <StaticGeoJsonMap
       mapStyle={mapStyle}
       mapPadding={mapPadding}
       geoJsonWithStyleList={geoJsonWithStyleList}
-    />
+    >
+      {children}
+    </StaticGeoJsonMap>
   );
 };

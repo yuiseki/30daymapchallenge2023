@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useCallback } from "react";
+import React, { MutableRefObject, useCallback } from 'react';
 import {
   AttributionControl,
   ControlPosition,
@@ -7,8 +7,9 @@ import {
   MapRef,
   NavigationControl,
   ViewStateChangeEvent,
-} from "react-map-gl/maplibre";
-import "maplibre-gl/dist/maplibre-gl.css";
+  Source,
+} from 'react-map-gl/maplibre';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 export const BaseMap: React.FC<{
   id?: string;
@@ -27,11 +28,10 @@ export const BaseMap: React.FC<{
   latitude,
   zoom,
   children,
-  mapStyle = "https://tile.openstreetmap.jp/styles/osm-bright-en/style.json",
+  mapStyle = 'https://tile.openstreetmap.jp/styles/osm-bright-en/style.json',
   enableInteractions = true,
-  attributionPosition = "top-right",
+  attributionPosition = 'top-right',
 }) => {
-
   return (
     <Map
       id={id}
@@ -52,9 +52,9 @@ export const BaseMap: React.FC<{
       {children}
       {enableInteractions && (
         <>
-          <GeolocateControl position="bottom-right" />
+          <GeolocateControl position='top-right' />
           <NavigationControl
-            position="bottom-right"
+            position='top-right'
             visualizePitch={true}
             showZoom={true}
             showCompass={true}
@@ -65,7 +65,7 @@ export const BaseMap: React.FC<{
         position={
           attributionPosition
             ? (attributionPosition as ControlPosition)
-            : "bottom-right"
+            : 'bottom-right'
         }
       />
     </Map>

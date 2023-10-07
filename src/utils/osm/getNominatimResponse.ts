@@ -1,10 +1,10 @@
-import { Md5 } from "ts-md5";
+import { Md5 } from 'ts-md5';
 
 export const getNominatimResponse = async (query: string) => {
   const params = new URLSearchParams();
-  params.append("format", "jsonv2");
-  params.append("polygon_geojson", "0");
-  params.append("q", query);
+  params.append('format', 'jsonv2');
+  params.append('polygon_geojson', '0');
+  params.append('q', query);
 
   const nominatimUrl = `https://nominatim.openstreetmap.org/search?${params.toString()}`;
   return await fetch(nominatimUrl);
@@ -38,7 +38,7 @@ export const getNominatimResponseJsonWithCache = async (
     try {
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
-      console.error("getNominatimResponseJsonWithCache error:", error);
+      console.error('getNominatimResponseJsonWithCache error:', error);
     }
     return json;
   };
@@ -47,7 +47,7 @@ export const getNominatimResponseJsonWithCache = async (
   if (cache) {
     const valueFromStore = JSON.parse(cache);
     if (
-      "resJson" in valueFromStore &&
+      'resJson' in valueFromStore &&
       unixtime - cacheSeconds < valueFromStore.unixtime
     ) {
       return valueFromStore.resJson;

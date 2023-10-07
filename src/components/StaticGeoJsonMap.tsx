@@ -1,10 +1,10 @@
 // @ts-ignore
-import * as turf from "@turf/turf";
-import { MapProvider, MapRef } from "react-map-gl/maplibre";
-import { BaseMap } from "./BaseMap";
-import { useEffect, useRef } from "react";
-import { FeatureCollection } from "geojson";
-import { GeoJsonToMarkers } from "./GeoJsonToSomething";
+import * as turf from '@turf/turf';
+import { MapProvider, MapRef } from 'react-map-gl/maplibre';
+import { BaseMap } from './BaseMap';
+import { useEffect, useRef } from 'react';
+import { FeatureCollection } from 'geojson';
+import { GeoJsonToMarkers } from './GeoJsonToSomething';
 
 export const StaticGeoJsonMap: React.FC<{
   mapStyle: string;
@@ -18,10 +18,12 @@ export const StaticGeoJsonMap: React.FC<{
     geojson: FeatureCollection;
   }>;
   mapPadding?: number;
+  children?: any;
 }> = ({
-  mapStyle = "https://tile.openstreetmap.jp/styles/osm-bright-en/style.json",
+  mapStyle = 'https://tile.openstreetmap.jp/styles/osm-bright-en/style.json',
   geoJsonWithStyleList = [],
   mapPadding = 200,
+  children,
 }) => {
   const mapRef = useRef<MapRef | null>(null);
 
@@ -35,7 +37,7 @@ export const StaticGeoJsonMap: React.FC<{
           console.log(JSON.stringify(item.geojson))
         );
         const everything: FeatureCollection = {
-          type: "FeatureCollection",
+          type: 'FeatureCollection',
           features: geoJsonWithStyleList
             .map((item) => item.geojson.features)
             .flat(),
@@ -62,8 +64,8 @@ export const StaticGeoJsonMap: React.FC<{
         longitude={0}
         latitude={0}
         zoom={1}
-        enableInteractions={false}
-        attributionPosition="bottom-right"
+        enableInteractions={true}
+        attributionPosition='bottom-right'
       >
         {geoJsonWithStyleList &&
           geoJsonWithStyleList.map((geoJsonWithStyle) => {
@@ -75,6 +77,7 @@ export const StaticGeoJsonMap: React.FC<{
               />
             );
           })}
+        {children}
       </BaseMap>
     </MapProvider>
   );
