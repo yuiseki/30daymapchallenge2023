@@ -4,7 +4,7 @@ import { MapProvider, MapRef } from 'react-map-gl/maplibre';
 import { BaseMap } from './BaseMap';
 import { useEffect, useRef } from 'react';
 import { FeatureCollection } from 'geojson';
-import { GeoJsonToMarkers } from './GeoJsonToSomething';
+import { GeoJsonToSomethings } from './GeoJsonToSomethings';
 
 export const StaticGeoJsonMap: React.FC<{
   mapStyle: string;
@@ -70,7 +70,7 @@ export const StaticGeoJsonMap: React.FC<{
         {geoJsonWithStyleList &&
           geoJsonWithStyleList.map((geoJsonWithStyle) => {
             return (
-              <GeoJsonToMarkers
+              <GeoJsonToSomethings
                 key={geoJsonWithStyle.id}
                 geojson={geoJsonWithStyle.geojson}
                 style={geoJsonWithStyle.style}
