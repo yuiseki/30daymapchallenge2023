@@ -22,21 +22,26 @@ export const JMAConditionalGeoJsonMap: React.FC<{
     return null;
   }
   console.log(conditions);
-  const warningAreas = conditions.map((condition) => {
-    return condition.areaTypes.map((areaType) => {
-      return areaType.areas.map((area) => {
-        return area.warnings.map((warning) => {
-          if (warning.attentions && warning.attentions.length > 0) {
-            return {
-              code: area.code,
-              attentions: warning.attentions,
-            };
-          }
+  const warningAreas = conditions
+    .map((condition) => {
+      return condition.areaTypes.map((areaType) => {
+        return areaType.areas.map((area) => {
+          return area.warnings.map((warning) => {
+            if (warning.attentions && warning.attentions.length > 0) {
+              return {
+                code: area.code,
+                attentions: warning.attentions,
+              };
+            }
+          });
         });
       });
-    });
-  }).flat(4).filter((item) => item);
-  const uniqWarningAreas = new Map(warningAreas.map((item) => [item?.code, item]));
+    })
+    .flat(4)
+    .filter((item) => item);
+  const uniqWarningAreas = new Map(
+    warningAreas.map((item) => [item?.code, item])
+  );
   return (
     <>
       {geojson.features.map((feature) => {
@@ -47,14 +52,20 @@ export const JMAConditionalGeoJsonMap: React.FC<{
         if (!warningLevel) {
           return null;
         }
-        const alert = warningLevel.attentions?.find((item) => item.includes('警戒') || item.includes('警報'));
+        const alert = warningLevel.attentions?.find(
+          (item) => item.includes('警戒') || item.includes('警報')
+        );
         console.log(warningLevel.attentions);
 
         return (
           <Fragment key={feature.properties.code}>
             {(feature.geometry.type === 'Polygon' ||
               feature.geometry.type === 'MultiPolygon') && (
-              <Source type='geojson' data={feature} attribution='<a href="https://www.jma.go.jp/bosai/map.html">気象庁</a>'>
+              <Source
+                type='geojson'
+                data={feature}
+                attribution='<a href="https://www.jma.go.jp/bosai/map.html">気象庁</a>'
+              >
                 <Layer
                   {...{
                     id: `${feature.properties.code}-line`,

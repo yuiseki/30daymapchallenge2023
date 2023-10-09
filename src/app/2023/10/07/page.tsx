@@ -6,7 +6,6 @@ import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
 import { Layer, Source } from 'react-map-gl/maplibre';
 import { useEffect, useMemo, useState } from 'react';
 import { useJMANowcastTileUrl, useJMARiskRasterTileUrl } from '@/lib/jma';
-import useSWR from 'swr';
 import { JMAConditionalGeoJsonMap } from '@/components/JMAConditionalGeoJsonMap';
 
 const overpassQueryWithIconStyleList = [
@@ -18,7 +17,7 @@ const overpassQueryWithIconStyleList = [
     `,
     featureStyle: {
       color: 'transparent',
-      fillColor: 'transparent'
+      fillColor: 'transparent',
     },
   },
   {
@@ -218,7 +217,7 @@ export default function Page() {
           '<a href="https://www.jma.go.jp/bosai/nowc/">気象庁 キキクル</a>',
         opacity: 0.4,
         maxzoom: 10,
-      }
+      },
     ];
   }, [landslideTileUrl, inundateTileUrl, nowcastTileUrl]);
 
@@ -256,9 +255,9 @@ export default function Page() {
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-      <StaticOverpassQueryMap overpassQueryWithFeatureStyleList={
-        overpassQueryWithIconStyleList
-      }>
+      <StaticOverpassQueryMap
+        overpassQueryWithFeatureStyleList={overpassQueryWithIconStyleList}
+      >
         <div
           style={{
             position: 'absolute',
@@ -334,9 +333,12 @@ export default function Page() {
               </Source>
             );
           })}
-          {class10sGeoJson && (
-          <JMAConditionalGeoJsonMap geojson={class10sGeoJson} conditions={JMAWarnings} />
-          )}
+        {class10sGeoJson && (
+          <JMAConditionalGeoJsonMap
+            geojson={class10sGeoJson}
+            conditions={JMAWarnings}
+          />
+        )}
       </StaticOverpassQueryMap>
     </div>
   );
