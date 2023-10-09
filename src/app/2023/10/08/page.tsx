@@ -37,6 +37,20 @@ const overpassQueryWithFeatureStyleList = [
   {
     overpassQuery: `
         [out:json][timeout:30000];
+        area["name:en"="Palestinian Territories"]->.searchArea;
+        (
+          nwr["amenity"="hospital"](area.searchArea);
+        );
+        out geom;
+    `,
+    featureStyle: {
+      color: 'yellow',
+      emoji: '🏥'
+    }
+  },
+  {
+    overpassQuery: `
+        [out:json][timeout:30000];
         (
           relation["name:en"="Israel"];
           relation["name:en"="Golan Regional Council"];
