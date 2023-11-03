@@ -154,27 +154,13 @@ out geom;
           👨‍👩‍👦‍👦
         </Marker>
         {routeGeoJson && (
-          <>
-            <h3
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                zIndex: 100,
-                padding: '8px',
-                background: 'rgba(255, 255, 255, 0.4)',
-              }}
-            >
-              hoge
-            </h3>
-            <GeoJsonToSomethings
-              geojson={routeGeoJson}
-              style={{
-                color: 'blue',
-                fillColor: 'blue',
-              }}
-            />
-          </>
+          <GeoJsonToSomethings
+            geojson={routeGeoJson}
+            style={{
+              color: 'blue',
+              fillColor: 'blue',
+            }}
+          />
         )}
       </StaticOverpassQueryMap>
     </div>

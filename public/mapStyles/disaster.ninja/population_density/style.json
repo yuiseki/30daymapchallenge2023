@@ -1,0 +1,46 @@
+{
+  "version": 8,
+  "sources": {
+    "bivariate": {
+      "type": "vector",
+      "tiles": [
+        "https://disaster.ninja/active/api/tiles/bivariate/v1/{z}/{x}/{y}.mvt?indicatorsClass=general"
+      ],
+      "attribution": "<a href=\"https://apps.disaster.ninja/active/\" target=\"_blank\">Source: Kontur, Disaster Ninja</a>"
+    }
+  },
+  "layers": [
+    {
+      "id": "bivariate",
+      "type": "fill",
+      "source": "bivariate",
+      "source-layer": "stats",
+      "minzoom": 0,
+      "maxzoom": 22,
+      "paint": {
+        "fill-color": [
+          "interpolate",
+          ["exponential", 0.01],
+          ["get", "population"],
+          0,
+          "transparent",
+          1,
+          "#ffffbf",
+          100,
+          "#e6f598",
+          1000,
+          "#f4e153",
+          5000,
+          "#ffc0cb",
+          10000,
+          "#ff6c93",
+          500000,
+          "#d53e4f",
+          1000000,
+          "#ff0000"
+        ],
+        "fill-opacity": 0.5
+      }
+    }
+  ]
+}
