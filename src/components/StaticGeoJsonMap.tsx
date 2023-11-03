@@ -19,11 +19,13 @@ export const StaticGeoJsonMap: React.FC<{
   }>;
   mapPadding?: number;
   children?: any;
+  enableInteractions?: boolean;
 }> = ({
   mapStyle = 'https://tile.openstreetmap.jp/styles/osm-bright-en/style.json',
   geoJsonWithStyleList = [],
   mapPadding = 200,
   children,
+  enableInteractions = false,
 }) => {
   const mapRef = useRef<MapRef | null>(null);
 
@@ -34,7 +36,7 @@ export const StaticGeoJsonMap: React.FC<{
       try {
         console.log(geoJsonWithStyleList);
         geoJsonWithStyleList.map((item) =>
-          console.log(JSON.stringify(item.geojson))
+          console.log(item.geojson)
         );
         const everything: FeatureCollection = {
           type: 'FeatureCollection',
@@ -64,7 +66,7 @@ export const StaticGeoJsonMap: React.FC<{
         longitude={0}
         latitude={0}
         zoom={1}
-        enableInteractions={true}
+        enableInteractions={enableInteractions}
         attributionPosition='bottom-right'
       >
         {geoJsonWithStyleList &&

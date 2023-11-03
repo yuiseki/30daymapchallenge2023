@@ -3,7 +3,35 @@
 import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
 
 export default function Page() {
-  const overpassQuery = `
+  const overpassQueryWithFeatureStyleList = [
+    {
+      overpassQuery: `
+[out:json][timeout:30000];
+area["name:en"="Gaza Strip"]->.searchArea;
+(
+  nwr["amenity"="hospital"](area.searchArea);
+);
+out geom;
+`,
+      featureStyle: {
+        emoji: '🏥',
+      },
+    },
+    {
+      overpassQuery: `
+[out:json][timeout:30000];
+area["name:en"="Gaza Strip"]->.searchArea;
+(
+  nwr["amenity"="school"](area.searchArea);
+);
+out geom;
+`,
+      featureStyle: {
+        emoji: '🏫',
+      },
+    },
+    {
+      overpassQuery: `
 [out:json][timeout:30000];
 area["name:en"="Gaza Strip"]->.searchArea;
 (
@@ -14,7 +42,19 @@ area["name:en"="Gaza Strip"]->.searchArea;
   nwr["highway"="	tertiary"](area.searchArea);
 );
 out geom;
-`;
+`,
+      featureStyle: {
+        color: 'orange',
+      },
+    },
+    {
+      overpassQuery: `
+[out:json][timeout:30000];
+relation["name:en"="Gaza Strip"];
+out geom;
+`,
+    },
+  ];
   return (
     <div
       style={{
@@ -35,13 +75,11 @@ out geom;
           background: 'rgba(255, 255, 255, 0.4)',
         }}
       >
-        Major roads in Gaza Strip
+        The Gaza Strip
       </h1>
       <StaticOverpassQueryMap
         mapStyle='https://trident.yuiseki.net/map_styles/fiord-color-gl-style/style.json'
-        overpassQueryWithFeatureStyleList={[
-          { overpassQuery: overpassQuery, featureStyle: { color: 'orange' } },
-        ]}
+        overpassQueryWithFeatureStyleList={overpassQueryWithFeatureStyleList}
       />
     </div>
   );

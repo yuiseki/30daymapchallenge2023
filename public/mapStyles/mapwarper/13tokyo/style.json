@@ -1,0 +1,22 @@
+{
+  "version": 8,
+  "sources": {
+    "mapwarper": {
+      "type": "raster",
+      "tiles": [
+        "https://mapwarper.h-gis.jp/maps/tile/3699/{z}/{x}/{y}.png"
+      ],
+      "tileSize": 128,
+      "attribution": "<a href=\"https://mapwarper.h-gis.jp/\" target=\"_blank\">Source: 日本版 Map Warper</a>"
+    }
+  },
+  "layers": [
+    {
+      "id": "mapwarper",
+      "type": "raster",
+      "source": "mapwarper",
+      "minzoom": 0,
+      "maxzoom": 22
+    }
+  ]
+}

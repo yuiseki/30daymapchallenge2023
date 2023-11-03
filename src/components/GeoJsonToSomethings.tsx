@@ -159,6 +159,23 @@ export const GeoJsonToSomethings: React.FC<{
 
         return (
           <Fragment key={feature.id}>
+            {feature.geometry.type === 'LineString' && (
+              <Source type='geojson' data={feature}>
+                {
+                  <Layer
+                    {...{
+                      id: `${feature.id}-line`,
+                      type: 'line',
+                      paint: {
+                        'line-width': 4,
+                        'line-color': style?.color ? style.color : '#f2f8fc',
+                        'line-opacity': 0.8,
+                      },
+                    }}
+                  />
+                }
+              </Source>
+            )}
             {(feature.geometry.type === 'Polygon' ||
               feature.geometry.type === 'MultiPolygon') && (
               <Source type='geojson' data={feature}>

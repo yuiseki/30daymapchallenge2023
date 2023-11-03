@@ -18,11 +18,13 @@ export const StaticOverpassQueryMap: React.FC<{
     };
   }>;
   children?: any;
+  enableInteractions?: boolean;
 }> = ({
   mapStyle = 'https://tile.openstreetmap.jp/styles/osm-bright-en/style.json',
   mapPadding = 200,
   overpassQueryWithFeatureStyleList,
   children,
+  enableInteractions = false,
 }) => {
   const [geoJsonWithStyleList, setGeoJsonWithStyleList] = useState<
     Array<{
@@ -73,6 +75,7 @@ export const StaticOverpassQueryMap: React.FC<{
       mapStyle={mapStyle}
       mapPadding={mapPadding}
       geoJsonWithStyleList={geoJsonWithStyleList}
+      enableInteractions={enableInteractions}
     >
       {children}
     </StaticGeoJsonMap>

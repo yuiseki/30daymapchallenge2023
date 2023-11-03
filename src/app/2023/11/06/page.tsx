@@ -1,20 +1,31 @@
 'use client';
 
+import { unM49 } from 'un-m49';
 import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
 
 export default function Page() {
-  const overpassQuery = `
+  const countriesInAsia = unM49
+      .filter((v) => v.name.includes('Asia') && v.type === 2)
+      .map((v) => {
+        return unM49.filter((vv) => {
+          return vv.parent === v.code;
+        });
+      })
+      .flat();
+
+  const overpassQueryWithFeatureStyleList = [
+    {
+      overpassQuery: `
 [out:json][timeout:30000];
-area["name:en"="Gaza Strip"]->.searchArea;
 (
-  nwr["highway"="motorway"](area.searchArea);
-  nwr["highway"="trunk"](area.searchArea);
-  nwr["highway"="primary"](area.searchArea);
-  nwr["highway"="secondary"](area.searchArea);
-  nwr["highway"="	tertiary"](area.searchArea);
+${countriesInAsia.map((v) => {
+  return `relation["boundary"="administrative"]["admin_level"=2]["ISO3166-1:alpha3"="${v.iso3166}"];`;
+}).join('\n')}
 );
 out geom;
-`;
+`
+  }];
+
   return (
     <div
       style={{
@@ -35,13 +46,11 @@ out geom;
           background: 'rgba(255, 255, 255, 0.4)',
         }}
       >
-        Major roads in Gaza Strip
+        Countries in Asia
       </h1>
       <StaticOverpassQueryMap
         mapStyle='https://trident.yuiseki.net/map_styles/fiord-color-gl-style/style.json'
-        overpassQueryWithFeatureStyleList={[
-          { overpassQuery: overpassQuery, featureStyle: { color: 'orange' } },
-        ]}
+        overpassQueryWithFeatureStyleList={overpassQueryWithFeatureStyleList}
       />
     </div>
   );
