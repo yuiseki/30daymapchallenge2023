@@ -27,8 +27,7 @@ export default function Page() {
     if (
       !mapContainer.current ||
       !mapContainerA.current ||
-      !mapContainerB.current ||
-      !window
+      !mapContainerB.current
     )
       return;
     if (initialized) return;
