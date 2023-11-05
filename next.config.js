@@ -10,20 +10,6 @@ const nextConfig = {
         CESIUM_BASE_URL: JSON.stringify('/cesium'),
       })
     );
-    config.plugins.push(
-      new CopyPlugin({
-        patterns: [
-          {
-            from: './node_modules/cesium/Build/Cesium',
-            to: './static/cesium',
-            globOptions: {
-              ignore: ['**/*.js', '**/*.d.ts'],
-            },
-            force: true,
-          },
-        ],
-      })
-    );
     return config;
   },
 };

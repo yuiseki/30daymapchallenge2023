@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "symlink-dir node_modules/cesium/Build/Cesium public/cesium && npx symlink-dir node_modules/cesium/Build/Cesium .vercel/output/static/cesium"
+    "lint": "next lint"
   },
   "dependencies": {
     "@deck.gl/core": "^8.9.32",
