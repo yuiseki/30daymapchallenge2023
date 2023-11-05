@@ -66,23 +66,23 @@ export default function Page() {
         overpassQueryWithFeatureStyleList={overpassQueryWithFeatureStyleList}
       >
         <Source
-          key={`koppen-gueiger-source`}
-          id={`koppen-gueiger-source`}
+          key={`arcgis-imagery-source`}
+          id={`arcgis-imagery-source`}
           type='raster'
           tiles={[
-            'https://tiles.arcgis.com/tiles/bFQCiZqoe0LrqfWM/arcgis/rest/services/mapa_climas_koppen_Gueiger_actualizado_HESS_2007/MapServer/tile/{z}/{y}/{x}',
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
           ]}
           tileSize={256}
           attribution={
-            '<a href="https://www.arcgis.com/home/item.html?id=9613417dd1fb4ab19bf6315b9154615b" target="_blank">Source: Peel MC, Finlayson BL & McMahon TA (2007), Updated world map of the Köppen-Geiger climate classification, Hydrol. Earth Syst. Sci., 11, 1633-1644. Traducción al español y adaptacion educativa: Javier Velilla Gil</a>'
+            "<a href=\"https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/\" target=\"_blank\">Source: Esri, Maxar, Earthstar Geographics</a>"
           }
-          maxzoom={8}
+          maxzoom={18}
         >
           <Layer
-            id={`koppen-gueiger-layer`}
+            id={`arcgis-imagery-layer`}
             type='raster'
             paint={{
-              'raster-opacity': 0.5,
+              'raster-opacity': 0.6,
             }}
           />
         </Source>
