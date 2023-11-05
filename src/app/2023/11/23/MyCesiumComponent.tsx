@@ -17,7 +17,7 @@ import {
   Math as CesiumMath,
 } from 'cesium';
 import { useRef, useState } from 'react';
-//import "/public/cesium/Widgets/widgets.css"
+import "/public/cesium/Widgets/widgets.css"
 
 export const MyCesiumComponent = () => {
   const ref = useRef<CesiumComponentRef<CesiumViewer>>(null);

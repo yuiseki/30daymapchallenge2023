@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-css-tags */
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -17,10 +16,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <link
-        rel='stylesheet'
-        href='//cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Widgets/widgets.css'
-      />
       <body className={inter.className}>{children}</body>
     </html>
   );
