@@ -19,6 +19,7 @@ export const BaseMap: React.FC<{
   zoom: number;
   children?: any;
   mapStyle?: string;
+  hash?: boolean;
   enableInteractions?: boolean;
   attributionPosition?: string;
 }> = ({
@@ -30,6 +31,7 @@ export const BaseMap: React.FC<{
   children,
   mapStyle = 'https://tile.openstreetmap.jp/styles/osm-bright-en/style.json',
   enableInteractions = true,
+  hash = false,
   attributionPosition = 'top-right',
 }) => {
   return (
@@ -43,7 +45,7 @@ export const BaseMap: React.FC<{
         latitude: latitude,
         zoom: zoom,
       }}
-      hash={false}
+      hash={hash}
       maxZoom={22}
       maxPitch={85}
       scrollZoom={enableInteractions ? true : false}
