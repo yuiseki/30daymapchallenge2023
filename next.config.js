@@ -7,15 +7,15 @@ const nextConfig = {
   webpack: (config) => {
     config.plugins.push(
       new webpack.DefinePlugin({
-        CESIUM_BASE_URL: JSON.stringify('/cesium'),
+        CESIUM_BASE_URL: JSON.stringify('/cesium/Build/Cesium'),
       })
     );
     config.plugins.push(
       new CopyPlugin({
         patterns: [
           {
-            from: './node_modules/cesium/Build/Cesium',
-            to: './static/chunks/cesium',
+            from: './node_modules/cesium',
+            to: './public/cesium',
           },
         ],
       })
