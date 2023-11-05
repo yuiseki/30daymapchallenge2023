@@ -2,12 +2,21 @@
 
 import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
 
-export default function Page() {
-  const overpassQuery = `
+const overpassQueryWithFeatureStyleList = [
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 relation["name:en"="Gaza Strip"];
 out geom;
-`;
+`,
+    featureStyle: {
+      emoji: '🇵🇸',
+      fillColor: 'transparent',
+    },
+  },
+];
+
+export default function Page() {
   return (
     <div
       style={{
@@ -32,12 +41,7 @@ out geom;
       </h1>
       <StaticOverpassQueryMap
         mapStyle='https://tile.openstreetmap.jp/styles/maptiler-toner-en/style.json'
-        overpassQueryWithFeatureStyleList={[
-          {
-            overpassQuery: overpassQuery,
-            featureStyle: { fillColor: 'transparent' },
-          },
-        ]}
+        overpassQueryWithFeatureStyleList={overpassQueryWithFeatureStyleList}
       />
     </div>
   );

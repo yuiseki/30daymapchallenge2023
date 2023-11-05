@@ -2,10 +2,9 @@
 
 import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
 
-export default function Page() {
-  const overpassQueryWithFeatureStyleList = [
-    {
-      overpassQuery: `
+const overpassQueryWithFeatureStyleList = [
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 area["name:en"="Gaza Strip"]->.searchArea;
 (
@@ -13,12 +12,12 @@ area["name:en"="Gaza Strip"]->.searchArea;
 );
 out geom;
 `,
-      featureStyle: {
-        emoji: '🏥',
-      },
+    featureStyle: {
+      emoji: '🏥',
     },
-    {
-      overpassQuery: `
+  },
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 area["name:en"="Gaza Strip"]->.searchArea;
 (
@@ -26,12 +25,12 @@ area["name:en"="Gaza Strip"]->.searchArea;
 );
 out geom;
 `,
-      featureStyle: {
-        emoji: '🏫',
-      },
+    featureStyle: {
+      emoji: '🏫',
     },
-    {
-      overpassQuery: `
+  },
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 area["name:en"="Gaza Strip"]->.searchArea;
 (
@@ -43,18 +42,20 @@ area["name:en"="Gaza Strip"]->.searchArea;
 );
 out geom;
 `,
-      featureStyle: {
-        color: 'orange',
-      },
+    featureStyle: {
+      color: 'orange',
     },
-    {
-      overpassQuery: `
+  },
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 relation["name:en"="Gaza Strip"];
 out geom;
 `,
-    },
-  ];
+  },
+];
+
+export default function Page() {
   return (
     <div
       style={{

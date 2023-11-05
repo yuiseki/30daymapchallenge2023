@@ -9,61 +9,61 @@ import { getValhallaResponseJsonWithCache } from '@/utils/osm/getValhallaRespons
 import { GeoJsonToSomethings } from '@/components/GeoJsonToSomethings';
 
 // https://valhalla.github.io/demos/polyline/decode.js
-function decodePolyline(encoded:string, mul:number) {
+function decodePolyline(encoded: string, mul: number) {
   //precision
   var inv = 1.0 / mul;
   var decoded = [];
-  var previous = [0,0];
+  var previous = [0, 0];
   var i = 0;
   //for each byte
-  while(i < encoded.length) {
+  while (i < encoded.length) {
     //for each coord (lat, lon)
-    var ll = [0,0]
-    for(var j = 0; j < 2; j++) {
+    var ll = [0, 0];
+    for (var j = 0; j < 2; j++) {
       var shift = 0;
       var byte = 0x20;
       //keep decoding bytes until you have this coord
-      while(byte >= 0x20) {
+      while (byte >= 0x20) {
         byte = encoded.charCodeAt(i++) - 63;
         ll[j] |= (byte & 0x1f) << shift;
         shift += 5;
       }
       //add previous offset to get final value and remember for next one
-      ll[j] = previous[j] + (ll[j] & 1 ? ~(ll[j] >> 1) : (ll[j] >> 1));
+      ll[j] = previous[j] + (ll[j] & 1 ? ~(ll[j] >> 1) : ll[j] >> 1);
       previous[j] = ll[j];
     }
     //scale by precision and chop off long coords also flip the positions so
     //its the far more standard lon,lat instead of lat,lon
-    decoded.push([ll[1] * inv,ll[0] * inv]);
+    decoded.push([ll[1] * inv, ll[0] * inv]);
   }
   //hand back the list of coordinates
   return decoded;
-};
+}
 
-export default function Page() {
-  const overpassQueryWithFeatureStyleList = [
-    {
-      overpassQuery: `
+const overpassQueryWithFeatureStyleList = [
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 relation["name:en"="Gaza Strip"];
 out geom;
 `,
-      featureStyle: {
-        fillColor: 'transparent',
-      },
+    featureStyle: {
+      fillColor: 'transparent',
     },
-    {
-      overpassQuery: `
+  },
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 nwr["name:en"="Rafah Border Crossing Control Area"];
 out geom;
 `,
-      featureStyle: {
-        emoji: '🚧',
-      },
+    featureStyle: {
+      emoji: '🚧',
     },
-  ];
+  },
+];
 
+export default function Page() {
   const [marker, setMarker] = useState({
     latitude: 31.40906,
     longitude: 34.35994,

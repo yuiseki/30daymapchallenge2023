@@ -2,39 +2,42 @@
 import { latLngToCell, cellToLatLng, cellToBoundary } from 'h3-js';
 
 import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
+import { Layer, Source } from 'react-map-gl/maplibre';
 import { FeatureCollection } from 'geojson';
 import { GeoJsonToSomethings } from '@/components/GeoJsonToSomethings';
 
-export default function Page() {
-  const cell = '876520d95ffffff';
-  const boundary = cellToBoundary(cell, true);
-  const hexGeoJson = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        properties: { name: 'hex', id: 'hex' },
-        id: 'hex',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [boundary],
-        },
-      },
-    ],
-  } as FeatureCollection;
-  const overpassQueryWithFeatureStyleList = [
+const cell = '876520d95ffffff';
+const boundary = cellToBoundary(cell, true);
+const hexGeoJson = {
+  type: 'FeatureCollection',
+  features: [
     {
-      overpassQuery: `
+      type: 'Feature',
+      properties: { name: 'hex', id: 'hex' },
+      id: 'hex',
+      geometry: {
+        type: 'Polygon',
+        coordinates: [boundary],
+      },
+    },
+  ],
+} as FeatureCollection;
+
+const overpassQueryWithFeatureStyleList = [
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 relation["name:en"="Gaza Strip"];
 out geom;
 `,
-      featureStyle: {
-        emoji: '🇵🇸',
-        fillColor: 'transparent'
-      },
+    featureStyle: {
+      emoji: '🇵🇸',
+      fillColor: 'transparent',
     },
-  ];
+  },
+];
+
+export default function Page() {
   return (
     <div
       style={{
@@ -62,15 +65,27 @@ out geom;
         enableInteractions={true}
         overpassQueryWithFeatureStyleList={overpassQueryWithFeatureStyleList}
       >
-        {hexGeoJson && (
-          <GeoJsonToSomethings
-            geojson={hexGeoJson}
-            style={{
-              color: 'blue',
-              fillColor: 'blue',
+        <Source
+          key={`koppen-gueiger-source`}
+          id={`koppen-gueiger-source`}
+          type='raster'
+          tiles={[
+            'https://tiles.arcgis.com/tiles/bFQCiZqoe0LrqfWM/arcgis/rest/services/mapa_climas_koppen_Gueiger_actualizado_HESS_2007/MapServer/tile/{z}/{y}/{x}',
+          ]}
+          tileSize={256}
+          attribution={
+            '<a href="https://www.arcgis.com/home/item.html?id=9613417dd1fb4ab19bf6315b9154615b" target="_blank">Source: Peel MC, Finlayson BL & McMahon TA (2007), Updated world map of the Köppen-Geiger climate classification, Hydrol. Earth Syst. Sci., 11, 1633-1644. Traducción al español y adaptacion educativa: Javier Velilla Gil</a>'
+          }
+          maxzoom={8}
+        >
+          <Layer
+            id={`koppen-gueiger-layer`}
+            type='raster'
+            paint={{
+              'raster-opacity': 0.5,
             }}
           />
-        )}
+        </Source>
       </StaticOverpassQueryMap>
     </div>
   );

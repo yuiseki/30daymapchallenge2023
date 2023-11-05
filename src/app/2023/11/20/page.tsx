@@ -3,12 +3,21 @@
 import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
 import { Layer, Source } from 'react-map-gl/maplibre';
 
-export default function Page() {
-  const overpassQuery = `
+const overpassQueryWithFeatureStyleList = [
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 relation["name:en"="Gaza Strip"];
 out geom;
-`;
+`,
+    featureStyle: {
+      emoji: '🇵🇸',
+      fillColor: 'transparent',
+    },
+  },
+];
+
+export default function Page() {
   return (
     <div
       style={{
@@ -34,12 +43,7 @@ out geom;
       <StaticOverpassQueryMap
         mapStyle='/mapStyles/arcgis/world-imagery/style.json'
         enableInteractions={true}
-        overpassQueryWithFeatureStyleList={[
-          {
-            overpassQuery: overpassQuery,
-            featureStyle: { fillColor: 'transparent' },
-          },
-        ]}
+        overpassQueryWithFeatureStyleList={overpassQueryWithFeatureStyleList}
       >
         <Source
           key={`gsi-earthdegital-source`}

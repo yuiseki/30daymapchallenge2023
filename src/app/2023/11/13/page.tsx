@@ -2,10 +2,9 @@
 
 import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
 
-export default function Page() {
-  const overpassQueryWithFeatureStyleList = [
-    {
-      overpassQuery: `
+const overpassQueryWithFeatureStyleList = [
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 area["name:en"="Gaza Strip"]->.searchArea;
 (
@@ -13,9 +12,9 @@ area["name:en"="Gaza Strip"]->.searchArea;
 );
 out geom;
 `,
-    },
-    {
-      overpassQuery: `
+  },
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 area["name:en"="Gaza Strip"]->.searchArea;
 (
@@ -23,9 +22,9 @@ area["name:en"="Gaza Strip"]->.searchArea;
 );
 out geom;
 `,
-    },
-    {
-      overpassQuery: `
+  },
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 area["name:en"="Gaza Strip"]->.searchArea;
 (
@@ -33,9 +32,9 @@ area["name:en"="Gaza Strip"]->.searchArea;
 );
 out geom;
 `,
-    },
-    {
-      overpassQuery: `
+  },
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 area["name:en"="Gaza Strip"]->.searchArea;
 (
@@ -43,9 +42,9 @@ area["name:en"="Gaza Strip"]->.searchArea;
 );
 out geom;
 `,
-    },
-    {
-      overpassQuery: `
+  },
+  {
+    overpassQuery: `
 [out:json][timeout:30000];
 area["name:en"="Gaza Strip"]->.searchArea;
 (
@@ -53,8 +52,10 @@ area["name:en"="Gaza Strip"]->.searchArea;
 );
 out geom;
 `,
-    },
-  ];
+  },
+];
+
+export default function Page() {
   return (
     <div
       style={{
