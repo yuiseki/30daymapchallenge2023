@@ -1,6 +1,7 @@
 'use client';
 
 import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
+import { Layer, Source } from 'react-map-gl/maplibre';
 
 export default function Page() {
   const overpassQuery = `
@@ -31,7 +32,7 @@ out geom;
         The Gaza Strip
       </h1>
       <StaticOverpassQueryMap
-        mapStyle='/mapStyles/arcgis/koppen-gueiger/style.json'
+        mapStyle='/mapStyles/arcgis/world-imagery/style.json'
         enableInteractions={true}
         overpassQueryWithFeatureStyleList={[
           {
@@ -39,7 +40,29 @@ out geom;
             featureStyle: { fillColor: 'transparent' },
           },
         ]}
-      />
+      >
+        <Source
+          key={`koppen-gueiger-source`}
+          id={`koppen-gueiger-source`}
+          type='raster'
+          tiles={[
+            'https://tiles.arcgis.com/tiles/bFQCiZqoe0LrqfWM/arcgis/rest/services/mapa_climas_koppen_Gueiger_actualizado_HESS_2007/MapServer/tile/{z}/{y}/{x}',
+          ]}
+          tileSize={256}
+          attribution={
+            '<a href="https://www.arcgis.com/home/item.html?id=9613417dd1fb4ab19bf6315b9154615b" target="_blank">Source: Peel MC, Finlayson BL & McMahon TA (2007), Updated world map of the Köppen-Geiger climate classification, Hydrol. Earth Syst. Sci., 11, 1633-1644. Traducción al español y adaptacion educativa: Javier Velilla Gil</a>'
+          }
+          maxzoom={8}
+        >
+          <Layer
+            id={`koppen-gueiger-layer`}
+            type='raster'
+            paint={{
+              'raster-opacity': 0.5,
+            }}
+          />
+        </Source>
+      </StaticOverpassQueryMap>
     </div>
   );
 }
