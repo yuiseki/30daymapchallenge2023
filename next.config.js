@@ -15,7 +15,7 @@ const nextConfig = {
         patterns: [
           {
             from: './node_modules/cesium/Build/Cesium',
-            to: './public/cesium',
+            to: './static/cesium',
             globOptions: {
               ignore: ['**/*.js', '**/*.d.ts'],
             },
