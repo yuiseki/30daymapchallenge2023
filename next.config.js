@@ -16,7 +16,7 @@ const nextConfig = {
           {
             from: './node_modules/cesium',
             to: './public/cesium',
-            info: { minimized: true },
+            force: true,
           },
         ],
       })
