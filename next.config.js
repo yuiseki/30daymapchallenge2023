@@ -15,7 +15,7 @@ const nextConfig = {
         patterns: [
           {
             from: './node_modules/cesium/Build/Cesium',
-            to: './static/chunks/',
+            to: './static/chunks/cesium',
           },
         ],
       })
