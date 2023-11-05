@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { StaticGeoJsonMap } from './StaticGeoJsonMap';
 import { getOverpassResponseJsonWithCache } from '@/utils/osm/getOverpassResponse';
+import { MapRef } from 'react-map-gl/maplibre';
 
 export const StaticOverpassQueryMap: React.FC<{
   mapStyle?: string;
@@ -19,12 +20,14 @@ export const StaticOverpassQueryMap: React.FC<{
   }>;
   children?: any;
   enableInteractions?: boolean;
+  onLoadEverything?: (mapRef: MapRef) => void;
 }> = ({
   mapStyle = 'https://tile.openstreetmap.jp/styles/osm-bright-en/style.json',
   mapPadding = 200,
   overpassQueryWithFeatureStyleList,
   children,
   enableInteractions = false,
+  onLoadEverything
 }) => {
   const [geoJsonWithStyleList, setGeoJsonWithStyleList] = useState<
     Array<{
@@ -76,6 +79,7 @@ export const StaticOverpassQueryMap: React.FC<{
       mapPadding={mapPadding}
       geoJsonWithStyleList={geoJsonWithStyleList}
       enableInteractions={enableInteractions}
+      onLoadEverything={onLoadEverything}
     >
       {children}
     </StaticGeoJsonMap>

@@ -3,10 +3,14 @@ export default function Page() {
     <div
       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
-      <h1>#30DayMapChallenge</h1>
-      <h2>
-        <a href='./2023/10/07'>2023-10-07</a>
-      </h2>
+      <h1 style={{ marginTop: '25px' }}>#30DayMapChallenge</h1>
+      <div style={{ marginTop: '25px', fontSize: '1.5em' }}>
+        <ul>
+          <li>
+            <a href='/2023/11'>2023-11</a>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }

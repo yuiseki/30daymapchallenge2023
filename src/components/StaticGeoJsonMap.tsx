@@ -20,12 +20,14 @@ export const StaticGeoJsonMap: React.FC<{
   mapPadding?: number;
   children?: any;
   enableInteractions?: boolean;
+  onLoadEverything?: (mapRef: MapRef) => void;
 }> = ({
   mapStyle = 'https://tile.openstreetmap.jp/styles/osm-bright-en/style.json',
   geoJsonWithStyleList = [],
   mapPadding = 200,
   children,
   enableInteractions = false,
+  onLoadEverything
 }) => {
   const mapRef = useRef<MapRef | null>(null);
 
@@ -52,11 +54,12 @@ export const StaticGeoJsonMap: React.FC<{
           ],
           { padding: mapPadding, duration: 1000 }
         );
+        onLoadEverything && onLoadEverything(mapRef.current);
       } catch (error) {
         console.error(error);
       }
     }, 500);
-  }, [geoJsonWithStyleList, mapPadding]);
+  }, [geoJsonWithStyleList, mapPadding, onLoadEverything]);
 
   return (
     <MapProvider>

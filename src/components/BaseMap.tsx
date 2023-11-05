@@ -48,6 +48,7 @@ export const BaseMap: React.FC<{
       maxPitch={85}
       scrollZoom={enableInteractions ? true : false}
       dragPan={enableInteractions ? true : false}
+      dragRotate={enableInteractions ? true : false}
     >
       {children}
       {enableInteractions && (

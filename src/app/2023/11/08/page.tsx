@@ -5,7 +5,7 @@ import { StaticOverpassQueryMap } from '@/components/StaticOverpassQueryMap';
 
 export default function Page() {
   console.log(unM49.filter((v) => v.name.includes('Africa')));
-  const countriesInAsia = unM49
+  const countries = unM49
     .filter((v) => v.name.includes('Africa') && (v.type === 2 || v.type === 3))
     .map((v) => {
       return unM49.filter((vv) => {
@@ -19,7 +19,7 @@ export default function Page() {
       overpassQuery: `
 [out:json][timeout:30000];
 (
-${countriesInAsia
+${countries
   .map((v) => {
     if (v.iso3166) {
       return `relation["boundary"="administrative"]["admin_level"=2]["ISO3166-1:alpha3"="${v.iso3166}"];`;
